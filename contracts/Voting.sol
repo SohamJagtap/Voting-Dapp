@@ -2,7 +2,7 @@
 pragma solidity ^0.8.9;
 
 // Uncomment this line to use console.log
-// import "hardhat/console.sol";
+import "hardhat/console.sol";
 
 contract Voting {
     struct Candidate {
@@ -27,35 +27,38 @@ contract Voting {
         _;
     }
 
-    constructor(string[] memory candidateNames) {
+    constructor(string[] memory _candidateNames) {
         chairperson = msg.sender;
         voters[chairperson].approved = true;
-        for(uint i=0; i<candidateNames.length; i++)
+        for(uint i=0; i<_candidateNames.length; i++)
         {
-            candidates.push(Candidate(candidateNames[i], 0));
+            candidates.push(Candidate(_candidateNames[i], 0));
         }
     }
 
-    function approveVoter(address voterId) onlyOwner public {
-        require(!voters[voterId].approved, "You have already voted");
-        voters[voterId].approved = true;
+    function approveVoter(address _voterId) public onlyOwner {
+        require(!voters[_voterId].approved, "You have already voted");
+        voters[_voterId].approved = true;
     }
 
-    function vote(uint id) public {
-        require(voters[msg.sender].approved);
-        require(voters[msg.sender].voted);
+    function vote(uint _id) public {
+        require(voters[msg.sender].approved, "You are not approved to vote");
+        require(_id<candidates.length, "Invalid voting ID");
         voters[msg.sender].voted = true;
-        voters[msg.sender].candidateId = id;
+        voters[msg.sender].candidateId = _id;
+        candidates[_id].votecount++;
     }
 
     function getWinner() public view returns (string memory _winner) {
         uint highestVote = 0;
+        _winner = "null";
         for(uint i=0; i<candidates.length; i++) {
             if(candidates[i].votecount>highestVote) {
                 highestVote = candidates[i].votecount;
                 _winner = candidates[i].name;
             }
         }
+        return _winner;
     }
 
 }
