@@ -4,16 +4,19 @@ const {
 } = require("@nomicfoundation/hardhat-toolbox/network-helpers");
 const { anyValue } = require("@nomicfoundation/hardhat-chai-matchers/withArgs");
 const { assert } = require("chai");
+const {developmentChains} = require("../helper-hardhat-config");
+const { network } = require("hardhat");
 
-
-describe("Voting contract", function () {
+!developmentChains.includes(network.name)
+?describe.skip
+:describe("Voting contract", function () {
   async function deployVotingFixture() {
     const voting = await ethers.deployContract("Voting", [["soham", "aabha"]]);
     return voting;
   }
 
   it("Only owner can approve voter", async function(){
-    const [, addr1, addr2] = await ethers.getSigners();
+    const [owner, addr1, addr2] = await ethers.getSigners();
     const voting = await loadFixture(deployVotingFixture);
     try {
       await voting.connect(addr1).approveVoter(await addr2.getAddress());      
