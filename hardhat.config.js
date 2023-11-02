@@ -1,6 +1,5 @@
 const { ProviderWrapper } = require("hardhat/plugins");
 
-require("@nomicfoundation/hardhat-ethers");
 require("hardhat-deploy");
 require("hardhat-deploy-ethers");
 require('@nomicfoundation/hardhat-chai-matchers');

@@ -1,4 +1,4 @@
-module.exports = async ({getNamedAccounts, deployments}) => {
+const func = async ({getNamedAccounts, deployments}) => {
     const {deployer} = await getNamedAccounts();
     await deployments.deploy("Voting", {
         from: deployer,
@@ -7,3 +7,6 @@ module.exports = async ({getNamedAccounts, deployments}) => {
     }
     )
 }
+
+module.exports = func;
+func.tags = ["Voting"];
