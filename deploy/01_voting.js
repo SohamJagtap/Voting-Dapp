@@ -2,7 +2,7 @@ const func = async ({getNamedAccounts, deployments}) => {
     const {deployer} = await getNamedAccounts();
     await deployments.deploy("Voting", {
         from: deployer,
-        args: [["soham", "aabha"]],
+        args: [["name1", "name2"]],
         log: true
     }
     )
